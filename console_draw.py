@@ -3,6 +3,11 @@ import sys
 import time
 from art import text2art
 import numpy as np
+from typing import Tuple, Union
+
+SCREEN_SIZE_X = 80
+SCREEN_SIZE_Y = 24
+
 
 def draw() -> None:
     for i in range(80):
@@ -36,18 +41,30 @@ class Display:
     def _make_frame_string(self) -> None:
         ''' Generate string out of pixels list '''
 
-        self.frame_string: str = ''.join([''.join(row)+'\n' for row in self.__pixels])
+        self.frame_string: str = ''.join([''.join(row)+'\n' for row in self.__pixels])[:-1]
+
+def pixel_input(message) -> Union[Tuple, None]:
+    command: str = input(message)
+    command = command.replace(',', ' ')
+    try:
+        pixel_position = tuple([int(value.strip()) for value in command.strip().split()])
+        return pixel_position
+    except ValueError:
+        print('Incorrect x y')
+        return None
+    except Exception as e:
+        print(e)
+        return None
+
 
 
 if __name__ == '__main__':
-    display = Display(80, 24)
-    #display.set_pixel(12, 12)
-    #display.set_pixel(12, 13)
-    #display.set_pixel(13, 12)
-    #display.set_pixel(13, 13)
+    display = Display(SCREEN_SIZE_X, SCREEN_SIZE_Y)
     display.draw()
+
     while True:
-        command: str = input('draw x y: ')
-        pixel_position = [int(i) for i in command.split()]
-        display.set_pixel(pixel_position[0], pixel_position[1])
-        display.draw()
+        input_value = pixel_input('Draw x y: ')
+        if input_value: 
+            x, y = input_value
+            display.set_pixel(x, y)
+            display.draw()
