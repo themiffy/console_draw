@@ -1,8 +1,9 @@
-import os
+#import os
 import sys
+#from art import text2art
+#import numpy as np
 import time
-from art import text2art
-import numpy as np
+
 from typing import Tuple, Union
 
 SCREEN_SIZE_X = 80
@@ -27,7 +28,14 @@ class Display:
         '''Generate string out of the pixels list and draw it single time'''
 
         self._make_frame_string()
-        print(self.frame_string)
+
+        sys.stdout.write(u"\u001b[1000D") # does not work
+        sys.stdout.flush()
+
+        sys.stdout.write(self.frame_string)
+
+        
+
 
     def set_pixel(self, x: int, y: int) -> None:
         ''' Debug function setting pixel '''
